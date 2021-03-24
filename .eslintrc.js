@@ -4,7 +4,6 @@ module.exports = {
     commonjs: true,
     es2021: true,
     "jest/globals": true,
-    cy: true,
   },
   extends: ["plugin:react/recommended", "airbnb", "prettier"],
   parserOptions: {
@@ -12,6 +11,9 @@ module.exports = {
       jsx: true,
     },
     ecmaVersion: 12,
+  },
+  globals: {
+    cy: true,
   },
   plugins: ["react", "prettier", "jest"],
   rules: {
