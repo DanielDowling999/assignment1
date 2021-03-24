@@ -6,6 +6,7 @@ import "@testing-library/jest-dom/extend-expect";
 
 afterEach(cleanup);
 
+// Basic button test
 test("Renders button correctly", () => {
   const { container } = render(
     <BrowserRouter>
