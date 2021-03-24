@@ -21,6 +21,7 @@ test("Renders DateTime correctly", () => {
     </BrowserRouter>
   );
 
+  // compares a new date to the rendered one
   const d = new Date();
   const wordDay = DAYS[d.getDay()];
   expect(container).toHaveTextContent(d.getDate());
