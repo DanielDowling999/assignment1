@@ -157,7 +157,7 @@ describe("End to End Test", () => {
     cy.get(".timer-text").should("contain", "00:10");
   });
 
-  // Taskboard tests
+  // Taskboard tests (do tomorrow)
   /*
   it("loads Taskboard page", () => {
     cy.get("[data-testid=nav-taskboard-icon]").click({ force: true });
