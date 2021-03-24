@@ -1,10 +1,13 @@
 // Cypress test suite for end-to-end tests. Currently covers login, signup page rendering, home and dashboard pages.
 // Does not make any new accounts or tasks to prevent database from being polluted.
+// All tests are done in a single 'session' to prevent making multiple calls to the database. Helps emulate a user's
+// behaviour more accurately too.
+
 // Test Account details : Name: Test Account
 // Email: Test@test.com, password: TestAccount
-import cy from "cypress";
 
 describe("End to End Test", () => {
+  // Login/Signup tests
   it("successfully loads Login page", () => {
     cy.visit("/");
     cy.get("h1").should("contain", "Welcome");
@@ -13,7 +16,7 @@ describe("End to End Test", () => {
     cy.get("input[type=email]").type("Incorrect@no.com");
     cy.get("input[type=password]").type("wrong");
     cy.get(".button-container").should("contain", "Login").click();
-    // Waiting just to make sure
+    // Waiting just to make sure login failed
     cy.wait(2000);
     cy.get("h1").should("contain", "Welcome");
   });
@@ -31,15 +34,20 @@ describe("End to End Test", () => {
     cy.get("a").should("contain", "Log").click();
   });
   // NOTE: IF DATABASE HAS BEEN CLEARED/TEST ACCOUNT REMOVED FROM DATABASE, TESTS WILL FAIL
-  it("successfully logs in and loads Home page", () => {
-    cy.get("input[type=email]").type("Test@Test.com");
-    cy.get("input[type=password]").type("TestAccount");
-    cy.get(".button-container").should("contain", "Login").click();
-    cy.wait(2000);
-    cy.url().should("include", "/home");
-    cy.get("h1").should("contain", "Test");
-  });
+  // sometimes randomly has issues with logging in, so will retry at least twice
+  it(
+    "successfully logs in and loads Home page",
+    { retries: { runMode: 2, openMode: 2 } },
+    () => {
+      cy.get("input[type=email]").type("Test@Test.com");
+      cy.get("input[type=password]").type("TestAccount");
+      cy.get(".button-container").should("contain", "Login").click();
+      cy.url().should("include", "/home");
+      cy.get("h1").should("contain", "Test");
+    }
+  );
 
+  // Dashboard tests
   it("loads Dashboard Page", () => {
     // force true required to bypass 'visibility' issues, otherwise tester can't find it
     cy.get("[data-testid=nav-dashboard-icon]").click({ force: true });
@@ -47,7 +55,6 @@ describe("End to End Test", () => {
     cy.get("h1").should("contain", "Stats:");
   });
   // NOTE: IF DATABASE HAS BEEN CLEARED/TEST ACCOUNT REMOVED FROM DATABASE, TEST WILL FAIL
-
   it("sees a Task on the Dashboard", () => {
     cy.get(".task-list").should("contain", "Test Task");
     cy.contains("Second Task").click();
@@ -151,6 +158,29 @@ describe("End to End Test", () => {
     cy.get(".timer-text").should("contain", "00:10");
   });
 
+  // Taskboard tests
+  /*
+  it("loads Taskboard page", () => {
+    cy.get("[data-testid=nav-taskboard-icon]").click({ force: true });
+
+  });
+*/
+  // Home page tests
+  it("loads a task on the Home page", () => {
+    cy.get("[data-testid=nav-home-icon]").click({ force: true });
+    cy.contains("Second Task");
+  });
+
+  it("uses dashboard and task buttons as links", () => {
+    cy.contains("Second Task").click();
+    cy.url().should("include", "/dashboard");
+    cy.get(".current-task").should("contain", "Second");
+    cy.get("[data-testid=nav-home-icon]").click({ force: true });
+
+    cy.contains("Dashboard").click({ force: true });
+    cy.url().should("include", "/dashboard");
+  });
+  // Log out Test
   it("logs out successfully", () => {
     cy.get(".navbar__useravatar").click();
     cy.get("[data-testid=nav-logout-icon]").click();
