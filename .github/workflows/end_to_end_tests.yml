@@ -1,5 +1,5 @@
 name: End-to-End Tests
-on:[push]
+on: [push]
 
 jobs:
   cypress run:
@@ -7,12 +7,12 @@ jobs:
     container: cypress/browsers:node12.18.3-chrome87-ff82
     
     steps: 
-    - name: Check out Git repository
-      uses: actions/checkout@v2
+      - name: Check out Git repository
+        uses: actions/checkout@v2
       #install NPM dependencies, cache them correctly, and run all Cypress tests
-    - name: Setup Cypress
-      uses: cypress-io/github-action@v2.8.2
-      with:
-        chrome
+      - name: Setup Cypress
+        uses: cypress-io/github-action@v2.8.2
+        with: 
+          browser: chrome
     
 
