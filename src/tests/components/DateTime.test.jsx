@@ -1,6 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { render, cleanup } from "@testing-library/react";
+import render from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import DateTime from "../../components/DateTime";
 import "@testing-library/jest-dom/extend-expect";
