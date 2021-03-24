@@ -4,6 +4,7 @@ module.exports = {
     commonjs: true,
     es2021: true,
     "jest/globals": true,
+    cy: true,
   },
   extends: ["plugin:react/recommended", "airbnb", "prettier"],
   parserOptions: {
@@ -13,9 +14,6 @@ module.exports = {
     ecmaVersion: 12,
   },
   plugins: ["react", "prettier", "jest"],
-  global: {
-    cy: true,
-  },
   rules: {
     "react/prop-types": "off",
     "react/jsx-props-no-spreading": "off",
