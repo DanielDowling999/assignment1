@@ -1,7 +1,9 @@
-// Cypress test suite for end-to-end tests. Currently covers home and dashboard pages.
-
+// Cypress test suite for end-to-end tests. Currently covers login, signup page rendering, home and dashboard pages.
+// Does not make any new accounts or tasks to prevent database from being polluted.
 // Test Account details : Name: Test Account
 // Email: Test@test.com, password: TestAccount
+import cy from "cypress";
+
 describe("End to End Test", () => {
   it("successfully loads Login page", () => {
     cy.visit("/");
@@ -11,7 +13,7 @@ describe("End to End Test", () => {
     cy.get("input[type=email]").type("Incorrect@no.com");
     cy.get("input[type=password]").type("wrong");
     cy.get(".button-container").should("contain", "Login").click();
-    // waiting just to make sure
+    // Waiting just to make sure
     cy.wait(2000);
     cy.get("h1").should("contain", "Welcome");
   });
@@ -28,7 +30,7 @@ describe("End to End Test", () => {
 
     cy.get("a").should("contain", "Log").click();
   });
-  //NOTE: IF DATABASE HAS BEEN CLEARED/TEST ACCOUNT REMOVED FROM DATABASE, TESTS WILL FAIL
+  // NOTE: IF DATABASE HAS BEEN CLEARED/TEST ACCOUNT REMOVED FROM DATABASE, TESTS WILL FAIL
   it("successfully logs in and loads Home page", () => {
     cy.get("input[type=email]").type("Test@Test.com");
     cy.get("input[type=password]").type("TestAccount");
@@ -44,7 +46,7 @@ describe("End to End Test", () => {
     cy.url().should("include", "/dashboard");
     cy.get("h1").should("contain", "Stats:");
   });
-  //NOTE: IF DATABASE HAS BEEN CLEARED/TEST ACCOUNT REMOVED FROM DATABASE, TEST WILL FAIL
+  // NOTE: IF DATABASE HAS BEEN CLEARED/TEST ACCOUNT REMOVED FROM DATABASE, TEST WILL FAIL
 
   it("sees a Task on the Dashboard", () => {
     cy.get(".task-list").should("contain", "Test Task");
